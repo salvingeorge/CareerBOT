@@ -1,0 +1,44 @@
+{
+  "behaviors": [
+    {
+      "type": "gesture",
+      "name": "wave",
+      "description": "Wave (Right Hand)",
+      "start": 1.0,
+      "duration": 3.0
+    },
+    {
+      "type": "speech",
+      "text": "Hello!",
+      "start": 1.0,
+      "duration": 1.5
+    },
+    {
+      "type": "speech",
+      "text": "Glad to see you!",
+      "start": 4.5,
+      "duration": 2.0
+    },
+    {
+      "type": "gaze",
+      "direction": "at_human",
+      "description": "At human",
+      "start": 1.0,
+      "duration": 3.5
+    },
+    {
+      "type": "head",
+      "name": "nod",
+      "description": "Nod (top to bottom)",
+      "start": 4.5,
+      "duration": 1.5
+    },
+    {
+      "type": "posture",
+      "name": "happy_swirl",
+      "description": "Happy Swirl",
+      "start": 6.0,
+      "duration": 1.5
+    }
+  ]
+}
