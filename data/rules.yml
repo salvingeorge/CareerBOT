@@ -1,0 +1,45 @@
+version: "3.1"
+
+rules:
+- rule: Activate career form
+  steps:
+    - intent: affirm
+    - action: career_form
+    - active_loop: career_form
+    - slot_was_set:
+        - requested_slot: education_level
+
+- rule: Submit form
+  condition:
+    - active_loop: career_form
+  steps:
+    - action: career_form
+    - active_loop: null
+    - slot_was_set:
+        - requested_slot: null
+    - action: action_provide_careers
+
+- rule: Respond to goodbye
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: Handle career details request
+  steps:
+    - intent: ask_career_details
+    - action: action_provide_career_details
+
+- rule: Handle form validation
+  condition:
+    - active_loop: career_form
+  steps:
+    - action: validate_career_form
+    - active_loop: career_form
+
+- rule: Handle form interruption
+  condition:
+    - active_loop: career_form
+  steps:
+    - action: career_form
+    - slot_was_set:
+        - requested_slot: education_level

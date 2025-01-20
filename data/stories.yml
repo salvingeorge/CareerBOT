@@ -1,62 +1,35 @@
 version: "3.1"
 
 stories:
-- story: career assessment happy path
+- story: happy path
   steps:
-  - intent: greet
-  - action: utter_greet
-  - action: utter_ask_education
-  - intent: provide_education
-    entities:
-    - education_level: "Master's"
-  - action: utter_ask_work_location
-  - intent: provide_work_location
-    entities:
-    - location_preference: "Remote"
-  - action: utter_ask_work_hours
-  - intent: provide_work_hours
-    entities:
-    - hours_preference: "Flexible Hours"
-  - action: utter_ask_stress_level
-  - intent: provide_stress_level
-    entities:
-    - stress_level: "Moderate"
-  - action: utter_ask_salary
-  - intent: provide_salary_expectation
-    entities:
-    - salary_range: "Mid Range"
-  - action: utter_ask_team_size
-  - intent: provide_team_size
-    entities:
-    - team_size: "Small Team"
-  - action: action_set_team_size
-  - action: utter_ask_growth_speed
-  - intent: provide_growth_speed
-    entities:
-    - growth_speed: "Steady Pace"
-  - action: action_set_growth_speed
-  - action: utter_confirm_preferences
-  - action: action_generate_recommendations
-  - intent: goodbye
-  - action: utter_goodbye
+    - intent: greet
+    - action: utter_greet
+    - intent: affirm
+    - action: career_form
+    - active_loop: career_form
+    - active_loop: null
+    - action: action_provide_careers
+    - intent: ask_career_details
+    - action: action_provide_career_details
 
-- story: user wants career details
+- story: deny assessment
   steps:
-  - intent: greet
-  - action: utter_greet
-  - action: utter_ask_education
-  - intent: provide_education
-  - action: utter_ask_work_location
-  - intent: provide_work_location
-  - action: utter_ask_work_hours
-  - intent: provide_work_hours
-  - action: utter_ask_stress_level
-  - intent: provide_stress_level
-  - action: utter_ask_salary
-  - intent: provide_salary_expectation
-  - action: utter_confirm_preferences
-  - action: action_generate_recommendations
-  - intent: ask_career_details
-  - action: action_provide_career_details
-  - intent: goodbye
-  - action: utter_goodbye
+    - intent: greet
+    - action: utter_greet
+    - intent: deny
+    - action: utter_goodbye
+
+- story: interrupt form but continue
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: affirm
+    - action: career_form
+    - active_loop: career_form
+    - intent: chitchat
+    - action: utter_ask_continue
+    - intent: affirm
+    - action: career_form
+    - active_loop: null
+    - action: action_provide_careers

@@ -1,189 +1,257 @@
 version: "3.1"
 
 nlu:
-- intent: greet
-  examples: |
-    - hey
-    - hello
-    - hi
-    - hello there
-    - good morning
-    - good evening
-    - hey there
-    - let's start
-    - hi there
-    - greetings
+  - lookup: education_level
+    examples: |
+      - bachelor's
+      - bachelor
+      - bachelors
+      - master's
+      - master
+      - masters
+      - phd
+      - doctorate
 
-- intent: provide_education
-  examples: |
-    - I have a [Bachelor's](education_level) degree
-    - I completed my [Master's](education_level)
-    - I hold a [PhD](education_level)
-    - [Bachelor's](education_level)
-    - [Master's](education_level)
-    - [PhD](education_level)
-    - bachelor
-    - bachelors
-    - master
-    - masters
-    - doctorate
-    - bachelor's
-    - master's
-    - I studied till [Bachelor's](education_level)
-    - My highest education is [Master's](education_level)
-    - I finished my [PhD](education_level)
-    - Completed [Bachelor's](education_level)
+  - lookup: location_preference
+    examples: |
+      - remote
+      - from home
+      - remotely
+      - in-office
+      - office
+      - hybrid
+      - hybrid setup
 
-- intent: provide_work_location
-  examples: |
-    - I prefer [Remote](location_preference) work
-    - I want to work [In-Office](location_preference)
-    - [Hybrid](location_preference) would be best
-    - [Remote](location_preference)
-    - [In-Office](location_preference)
-    - [Hybrid](location_preference)
-    - remotely
-    - office
-    - from home
-    - I'd choose [Remote](location_preference)
-    - Prefer [In-Office](location_preference)
-    - [Hybrid](location_preference) works for me
-    - [Remote](location_preference) setup
+  - lookup: hours_preference
+    examples: |
+      - standard
+      - nine to five
+      - 9-5
+      - flexible
+      - flexible timing
+      - shift
+      - shift-based
 
-- intent: provide_work_hours
-  examples: |
-    - I prefer [Standard 9-5](hours_preference)
-    - [Flexible Hours](hours_preference) would be best
-    - I can do [Shift Work](hours_preference)
-    - [Standard 9-5](hours_preference)
-    - [Flexible Hours](hours_preference)
-    - [Shift Work](hours_preference)
-    - I like [Standard 9-5](hours_preference) timing
-    - [Flexible Hours](hours_preference) suit me
-    - Can work in [Shift Work](hours_preference)
-    - standard
-    - flexible
-    - shift
-    - nine to five
+  - lookup: stress_level
+    examples: |
+      - low
+      - low stress
+      - moderate
+      - medium
+      - high
+      - high pressure
 
-- intent: provide_stress_level
-  examples: |
-    - I can handle [Low](stress_level) stress
-    - [Moderate](stress_level) stress is fine
-    - I'm okay with [High](stress_level) stress
-    - [Low](stress_level) pressure preferred
-    - [Moderate](stress_level) is good
-    - [High](stress_level) stress is manageable
-    - Prefer [Low](stress_level) stress environment
-    - [Moderate](stress_level) stress level works
-    - Can manage [High](stress_level) stress
-    - low
-    - medium
-    - moderate
-    - high
+  - lookup: salary_range
+    examples: |
+      - entry level
+      - Entry level
+      - starting salary
+      - junior
+      - mid range
+      - middle
+      - mid-level
+      - senior level
+      - high salary
 
-- intent: provide_salary_expectation
-  examples: |
-    - Looking for [Entry Level](salary_range) salary
-    - I expect [Mid Range](salary_range) salary
-    - Want [Senior Level](salary_range) compensation
-    - [Entry Level](salary_range) is fine
-    - Prefer [Mid Range](salary_range)
-    - Need [Senior Level](salary_range)
-    - [Entry Level](salary_range) to start
-    - [Mid Range](salary_range) salary expectation
-    - Expecting [Senior Level](salary_range)
-    - entry
-    - mid
-    - senior
-    - starting
-    - middle
-    - high
+  - lookup: team_size
+    examples: |
+      - small team
+      - tiny group
+      - small
+      - medium team
+      - average-sized team
+      - large team
+      - big team
 
-- intent: provide_team_size
-  examples: |
-    - I prefer a [Small Team](team_size)
-    - [Medium Team](team_size) would be best
-    - I want to work in a [Large Team](team_size)
-    - [Small Team](team_size)
-    - [Medium Team](team_size)
-    - [Large Team](team_size)
-    - small
-    - medium
-    - large
-    - tiny
-    - big
+  - lookup: growth_speed
+    examples: |
+      - steady pace
+      - slow growth
+      - moderate growth
+      - balanced growth
+      - fast track
+      - rapid growth
 
-- intent: provide_growth_speed
-  examples: |
-    - I prefer [Steady Pace](growth_speed) for my career
-    - [Moderate Growth](growth_speed) would be ideal
-    - I want a [Fast Track](growth_speed) career growth
-    - [Steady Pace](growth_speed)
-    - [Moderate Growth](growth_speed)
-    - [Fast Track](growth_speed)
-    - steady
-    - moderate
-    - fast
-    - slow
-    - quick
-    - rapid
+  - intent: greet
+    examples: |
+      - hey
+      - hello
+      - hi
+      - hello there
+      - good morning
+      - good evening
+      - hey there
+      - let's start
+      - hi there
+      - greetings
 
-- intent: goodbye
-  examples: |
-    - bye
-    - goodbye
-    - see you around
-    - see you later
-    - good bye
-    - bye bye
-    - thanks goodbye
-    - that's all, goodbye
+  - intent: goodbye
+    examples: |
+      - bye
+      - goodbye
+      - see you around
+      - see you later
+      - good bye
+      - bye bye
+      - thanks goodbye
 
-- intent: affirm
-  examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
-    - sure
-    - ok
-    - great
-    - right
-    - good
-    - okay
-    - perfect
+  - intent: affirm
+    examples: |
+      - yes
+      - y
+      - indeed
+      - of course
+      - that sounds good
+      - correct
+      - sure
+      - ok
+      - great
 
-- intent: deny
-  examples: |
-    - no
-    - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
-    - nope
-    - disagree
+  - intent: deny
+    examples: |
+      - no
+      - n
+      - never
+      - I don't think so
+      - don't like that
+      - no way
+      - not really
 
-- intent: bot_challenge
-  examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
-    - what are you?
-    - who are you?
+  - intent: bot_challenge
+    examples: |
+      - are you a bot?
+      - are you a human?
+      - am I talking to a bot?
+      - am I talking to a human?
+      - what are you?
 
-- intent: start_career_assessment
-  examples: |
-    - I want career advice
-    - help me find a career
-    - I need career guidance
-    - what career should I choose
-    - help me choose a career
-    - career assessment
-    - start career assessment
-    - I want to find my ideal career
+  - intent: start_career_assessment
+    examples: |
+      - I want career advice
+      - help me find a career
+      - I need career guidance
+      - what career should I choose
+      - help me choose a career
+      - career assessment
+      - start career assessment
+
+  - intent: provide_education
+    examples: |
+      - I have a [Bachelor's](education_level) degree
+      - I completed my [Master's](education_level)
+      - I hold a [PhD](education_level)
+      - [Bachelor's](education_level)
+      - [Master's](education_level)
+      - [PhD](education_level)
+      - bachelor
+      - bachelors
+      - master's
+      - masters
+      - doctorate
+      - phd
+
+  - intent: provide_work_location
+    examples: |
+      - I prefer [Remote](location_preference) work
+      - I want to work [In-Office](location_preference)
+      - [Hybrid](location_preference) would be best
+      - I want to work [remotely](location_preference:Remote)
+      - [work from home](location_preference:Remote)
+      - prefer [office](location_preference:In-Office)
+      - want [flexible location](location_preference:Hybrid)
+
+  - intent: provide_growth_speed
+    examples: |
+      - [steady pace](growth_speed)
+      - [moderate growth](growth_speed)
+      - [fast track](growth_speed)
+      - prefer [slow growth](growth_speed)
+      - want [balanced growth](growth_speed)
+      - looking for [rapid growth](growth_speed)
+
+  - intent: provide_stress_level
+    examples: |
+      - [low](stress_level) stress level
+      - [moderate](stress_level) pressure
+      - [high](stress_level) intensity
+      - prefer [minimal](stress_level:Low) stress
+      - comfortable with [medium](stress_level:Moderate) pressure
+      - can handle [intense](stress_level:High) work
+
+  - intent: ask_career_details
+    examples: |
+      - tell me about Software Developer
+      - show me details for Data Scientist
+      - what does a UX Designer do
+      - more information about Software Developer
+      - explain Data Scientist role
+      - describe UX Designer position
+  - intent: provide_work_hours
+    examples: |
+      - I prefer [Standard 9-5](hours_preference)
+      - want [Flexible Hours](hours_preference)
+      - interested in [Shift Work](hours_preference)
+      - [Standard 9-5](hours_preference) works best
+      - [Flexible Hours](hours_preference) would be ideal
+      - can do [Shift Work](hours_preference)
+      - standard hours
+      - flexible schedule
+      - shift work
+      - regular schedule
+      - normal work hours
+      - night shift
+      - day shift
+
+  - intent: provide_salary_expectation
+    examples: |
+      - looking for [Entry Level](salary_range) salary
+      - prefer [Mid Range](salary_range) compensation
+      - want [Senior Level](salary_range) pay
+      - [Entry Level](salary_range) position
+      - [Mid Range](salary_range) role
+      - [Senior Level](salary_range) job
+      - entry level
+      - mid range
+      - senior level
+      - starting salary
+      - junior position
+      - senior position
+      - intermediate level
+      - beginner salary
+      - experienced position
+
+  - intent: provide_team_size
+    examples: |
+      - prefer [Small Team](team_size)
+      - want [Medium Team](team_size)
+      - looking for [Large Team](team_size)
+      - [Small Team](team_size) environment
+      - [Medium Team](team_size) setting
+      - [Large Team](team_size) workplace
+      - small team
+      - medium team
+      - large team
+      - compact team
+      - big group
+      - small group
+      - intimate team
+      - average sized team
+      - huge team
+
+  - intent: provide_growth_speed
+    examples: |
+      - I want [Steady Pace](growth_speed) progress
+      - prefer [Moderate Growth](growth_speed)
+      - looking for [Fast Track](growth_speed)
+      - [Steady Pace](growth_speed) development
+      - [Moderate Growth](growth_speed) path
+      - [Fast Track](growth_speed) career
+      - steady growth
+      - moderate pace
+      - fast advancement
+      - slow and steady
+      - balanced progression
+      - rapid promotion
+      - gradual development
+      - quick progression
+      - normal pace
