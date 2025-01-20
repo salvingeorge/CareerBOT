@@ -3,21 +3,26 @@ import threading
 import time
 from face_detection_system import FaceDetectionSystem
 from face_expression_system import ExpressionSystem
-from pepper_simulation import EnhancedCareerCoachSystem
+from pepper_simulation import CareerCoachSystem
 from typing import Dict, List, Any, Optional
 from queue import Queue
 import json
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import logging
+import requests
 
 
 class IntegratedSystem:
     def __init__(self):
         # Set up logging
         logging.basicConfig(level=logging.INFO,
-                            format='%(asctime)s - %(levelname)s - %(message)s')
+                          format='%(asctime)s - %(levelname)s - %(message)s')
         self.logger = logging.getLogger(__name__)
+
+        # Initialize RASA connection
+        self.rasa_url = "http://localhost:5005/webhooks/rest/webhook"
+        self.verify_rasa_connection()
 
         self.logger.info("Initializing Face Detection System...")
         self.face_system = FaceDetectionSystem(confidence_threshold=0.8)
@@ -26,7 +31,7 @@ class IntegratedSystem:
         self.expression_system = ExpressionSystem()
 
         self.logger.info("Initializing Pepper System...")
-        self.pepper_system = EnhancedCareerCoachSystem()
+        self.pepper_system = CareerCoachSystem()
 
         # Thread-safe containers
         self.interaction_queue = Queue()
@@ -38,6 +43,10 @@ class IntegratedSystem:
         # State tracking
         self.interaction_active = False
         self.expression_history = []
+
+        # Initialize event loop
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
 
         self.logger.info("All systems initialized successfully")
 
@@ -72,42 +81,97 @@ class IntegratedSystem:
             self.logger.error(f"Error in face detection: {str(e)}", exc_info=True)
             return False
 
+    def verify_rasa_connection(self):
+        """Verify RASA server is running"""
+        try:
+            test_message = {
+                "sender": "test",
+                "message": "hello"
+            }
+            response = requests.post(self.rasa_url, json=test_message)
+            if response.status_code == 200:
+                self.logger.info("RASA server connection verified")
+            else:
+                raise ConnectionError(f"RASA server returned status code {response.status_code}")
+        except requests.exceptions.ConnectionError:
+            self.logger.error("Cannot connect to RASA server. Please ensure it's running with:")
+            self.logger.error("rasa run -m models --enable-api --cors \"*\"")
+            raise
+
+    def send_to_rasa(self, user_id: str, message: str) -> list:
+        """Send message to RASA and get response"""
+        try:
+            payload = {
+                "sender": user_id,
+                "message": message
+            }
+            response = requests.post(self.rasa_url, json=payload)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                self.logger.error(f"RASA error: {response.status_code}")
+                return []
+        except Exception as e:
+            self.logger.error(f"RASA communication error: {e}")
+            return []
     def handle_pepper_interaction(self):
         """Handle the Pepper robot interaction with detected users"""
         self.logger.info("Starting Pepper interaction handler thread")
 
-        while self.running:
+        while self._running.is_set():
             try:
                 if not self.interaction_queue.empty():
                     user_info = self.interaction_queue.get()
                     self.logger.info(f"\nStarting new interaction with {user_info['name']}")
 
-                    # Customize greeting based on user type
-                    greeting = (f"Welcome back, {user_info['name']}! Nice to see you again!"
-                                if user_info['user_type'] == "team_member"
-                                else f"Hello {user_info['name']}! I'm your career coach!")
+                    with self._interaction_lock:
+                        self.current_user = user_info
+                        user_id = f"user_{user_info['name']}_{int(time.time())}"
 
-                    try:
-                        self.logger.info("Starting Pepper interaction...")
-                        with self._interaction_lock:
-                            self.current_user = user_info
-                            self.pepper_system.start_interaction_with_user(user_info, greeting)
-                        self.logger.info("Pepper interaction completed")
+                        # Initial greeting based on user type
+                        greeting = ("Welcome back!" if user_info['user_type'] == "team_member"
+                                    else "Hello! I'm your career coach!")
 
-                    except Exception as e:
-                        self.logger.error(f"Error in Pepper interaction: {str(e)}", exc_info=True)
+                        # Start RASA conversation
+                        responses = self.send_to_rasa(user_id, "hello")
+                        for response in responses:
+                            if 'text' in response:
+                                self.pepper_system.speak(response['text'])
+                                time.sleep(1)  # Give time for speech
 
-                    finally:
-                        with self._interaction_lock:
-                            self.interaction_active = False
-                            self.current_user = None
-                        self.logger.info("Interaction state reset")
+                        # Main interaction loop
+                        while self.interaction_active and self._running.is_set():
+                            # Get user input (replace with speech recognition later)
+                            user_input = input("\nYou: ").strip()
+
+                            if user_input.lower() in ['quit', 'exit', 'bye', 'goodbye']:
+                                break
+
+                            # Send to RASA and handle response
+                            responses = self.send_to_rasa(user_id, user_input)
+                            for response in responses:
+                                if 'text' in response:
+                                    self.pepper_system.speak(response['text'])
+                                    # Add appropriate gesture based on response
+                                    if any(word in response['text'].lower()
+                                           for word in ['hello', 'hi', 'welcome']):
+                                        self.pepper_system.wave()
+                                    elif any(word in response['text'].lower()
+                                             for word in ['goodbye', 'bye']):
+                                        self.pepper_system.wave()
+                                    elif any(word in response['text'].lower()
+                                             for word in ['understand', 'ok', 'got it']):
+                                        self.pepper_system.nod()
+
+            except Exception as e:
+                self.logger.error(f"Error in interaction handler: {e}", exc_info=True)
+            finally:
+                with self._interaction_lock:
+                    self.interaction_active = False
+                    self.current_user = None
 
                 time.sleep(0.1)
 
-            except Exception as e:
-                self.logger.error(f"Error in interaction handler: {str(e)}", exc_info=True)
-                time.sleep(1)  # Prevent rapid error loops
 
     def analyze_user_engagement(self, expression_results):
         """Analyze user engagement based on expressions with improved thresholds"""
@@ -261,6 +325,20 @@ class IntegratedSystem:
             cv2.destroyAllWindows()
             self.pepper_system.cleanup()
             self.logger.info("System shutdown completed")
+
+    def cleanup(self):
+        """Cleanup resources and stop event loop"""
+        try:
+            self._running.clear()
+            if hasattr(self, 'pepper_system'):
+                self.pepper_system.cleanup()
+            if hasattr(self, 'loop'):
+                self.loop.stop()
+                self.loop.close()
+        except Exception as e:
+            self.logger.error(f"Error during cleanup: {str(e)}")
+        finally:
+            cv2.destroyAllWindows()
 
 
 def main():

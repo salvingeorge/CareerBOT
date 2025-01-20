@@ -96,6 +96,11 @@ slots:
     influence_conversation: true
     mappings:
     - type: from_text
+  career_recommendations:
+    type: list
+    influence_conversation: false
+    mappings:
+      - type: custom
 
 forms:
   career_form:
