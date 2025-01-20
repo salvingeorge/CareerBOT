@@ -34,7 +34,10 @@ class SpeechSystem:
             "senior level": ["senior", "senior-level", "senior level", "high", "advanced"],
             "steady pace": ["steady", "steady pace", "slow", "slower", "gradual"],
             "moderate growth": ["moderate", "moderate growth", "medium pace", "medium growth"],
-            "fast track": ["fast", "fast track", "fast-track", "rapid", "quick"]
+            "fast track": ["fast", "fast track", "fast-track", "rapid", "quick"],
+            "low": ["low", "low stress", "minimal", "minimal stress", "light", "easy", "relaxed", "comfortable"],
+            "moderate": ["moderate", "medium", "medium stress", "average", "normal", "intermediate", "balanced"],
+            "high": ["high", "high stress", "intense", "challenging", "demanding", "heavy", "lots", "significant"]
         }
 
         # Adjust for ambient noise

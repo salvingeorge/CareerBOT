@@ -5,6 +5,7 @@ from datetime import datetime
 import time
 
 
+
 class FaceDetectionSystem:
     def __init__(self, confidence_threshold=0.6):
         self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')

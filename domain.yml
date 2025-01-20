@@ -1,0 +1,199 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - provide_education
+  - provide_work_location
+  - provide_work_hours
+  - provide_stress_level
+  - provide_salary_expectation
+  - provide_team_size
+  - provide_growth_speed
+  - ask_career_details
+  - bot_challenge
+  - start_career_assessment
+
+entities:
+  - education_level
+  - location_preference
+  - hours_preference
+  - stress_level
+  - salary_range
+
+slots:
+  education:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: education_level
+
+  work_location:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: location_preference
+
+  work_hours:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: hours_preference
+
+  stress_level:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: stress_level
+
+  expected_salary:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: salary_range
+
+  team_size:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: team_size
+
+  growth_speed:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: growth_speed
+
+responses:
+  utter_greet:
+    - text: "Hello! I'm CareerBot, your personal career advisor. I'll help you find the perfect career path based on your preferences."
+
+  utter_ask_education:
+    - text: "What's your highest level of education? (Bachelor's, Master's, or PhD)"
+
+  utter_ask_work_location:
+    - text: "Do you prefer working remotely, in-office, or hybrid?"
+
+  utter_ask_work_hours:
+    - text: "What working hours do you prefer? (Standard 9-5, Flexible Hours, or Shift Work)"
+
+  utter_ask_stress_level:
+    - text: "What level of work stress can you handle? (Low, Moderate, or High)"
+
+  utter_ask_salary:
+    - text: "What's your expected salary range? (Entry Level, Mid Range, or Senior Level)"
+
+  utter_confirm_preferences:
+    - text: "Thanks! I've noted your preferences. Let me analyze the best career options for you."
+
+  utter_goodbye:
+    - text: "Thank you for using CareerBot! Good luck with your career journey!"
+
+  utter_iamabot:
+    - text: "I am CareerBot, your personal career advisor. I can help you find suitable career options based on your preferences."
+
+  utter_default:
+    - text: "I'm sorry, I didn't quite understand that. Could you please rephrase?"
+
+  utter_ask_team_size:
+    - text: "What team size do you prefer working in? (Small Team, Medium Team, or Large Team)"
+
+  utter_ask_growth_speed:
+    - text: "How fast do you want your career to grow? (Steady Pace, Moderate Growth, or Fast Track)"
+
+
+actions:
+  - action_generate_recommendations
+  - action_provide_career_details
+  - action_set_team_size
+  - action_ask_growth_speed
+  - action_set_growth_speed
+  - validate_career_form
+
+synonyms:
+  bachelor's:
+    - bachelor's
+    - bachelor
+    - bachelors
+  master's:
+    - master's
+    - master
+    - masters
+  phd:
+    - phd
+    - doctorate
+  remote:
+    - remote
+    - from home
+    - remotely
+  in-office:
+    - in-office
+    - office
+  hybrid:
+    - hybrid
+    - hybrid setup
+  standard 9-5:
+    - standard
+    - nine to five
+    - 9-5
+  flexible hours:
+    - flexible
+    - flexible timing
+  shift work:
+    - shift
+    - shift-based
+  low:
+    - low
+    - low stress
+  moderate:
+    - moderate
+    - medium
+  high:
+    - high
+    - high pressure
+  entry level:
+    - entry level
+    - starting salary
+    - junior
+  mid range:
+    - mid range
+    - middle
+    - mid-level
+  senior level:
+    - senior level
+    - high salary
+  small team:
+    - small team
+    - tiny group
+    - small
+  medium team:
+    - medium team
+    - average-sized team
+  large team:
+    - large team
+    - big team
+  steady pace:
+    - steady pace
+    - slow growth
+  moderate growth:
+    - moderate growth
+    - balanced growth
+  fast track:
+    - fast track
+    - rapid growth
+forms:
+  career_form:
+    required_slots:
+      - education
+      - work_location
+      - work_hours
+      - stress_level
+      - expected_salary
+      - team_size
+      - growth_speed
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
